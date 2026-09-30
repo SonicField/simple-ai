@@ -58,6 +58,24 @@ The same pattern applies to editors, REPLs, text interfaces, build tools, and
 other command-line software. Not every task needs an interactive session, a
 rendered screen, or a formal report. The parts compose when those needs arise.
 
+## Executable integration example
+
+The worked [PTY-to-screen example](examples/pty-termshot.md) uses a
+deterministic interactive Bash fixture to show `simple-pty` and
+`simple-termshot` operating together. Its integration test verifies that the
+raw PTY history retains an overwritten progress value while the rendered
+screen contains only the final value.
+
+With both tools installed on `PATH`, run:
+
+```sh
+make test
+```
+
+The test also accepts absolute executable paths through `SIMPLE_PTY_BIN` and
+`SIMPLE_TERMSHOT_BIN`. It does not assume that component repositories are
+siblings of this repository.
+
 ## Why command-line tools
 
 The command line is a useful common interface. Humans already use it to build,
@@ -102,6 +120,10 @@ to demonstrated needs rather than accumulate tools for their own sake.
 ## Current status
 
 Simple is presently a description of a family of independent projects. This
-repository contains the shared overview; implementation, issue tracking,
-releases, and project-specific documentation remain in each project's own
-repository.
+repository contains the shared overview, worked composition examples, and
+manually invoked integration checks. Implementation, issue tracking, releases,
+and project-specific documentation remain in each project's own repository.
+
+The current executable example covers `simple-pty` with `simple-termshot`; it
+does not claim executable integration coverage of all four projects. See
+[Release Validation](RELEASING.md) for the manual overall-version process.

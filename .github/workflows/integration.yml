@@ -1,0 +1,63 @@
+name: Integration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  latest-tools:
+    name: Latest tools on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+
+    steps:
+      - name: Check out simple-ai
+        uses: actions/checkout@v4
+
+      - name: Check out latest simple-pty
+        uses: actions/checkout@v4
+        with:
+          repository: SonicField/simple-pty
+          path: _components/simple-pty
+
+      - name: Check out latest simple-termshot
+        uses: actions/checkout@v4
+        with:
+          repository: SonicField/simple-termshot
+          path: _components/simple-termshot
+
+      - name: Record component revisions
+        shell: bash
+        run: |
+          pty_revision=$(git -C _components/simple-pty rev-parse HEAD)
+          termshot_revision=$(git -C _components/simple-termshot rev-parse HEAD)
+          {
+            echo '## Component revisions'
+            echo
+            echo "- simple-pty: \`$pty_revision\`"
+            echo "- simple-termshot: \`$termshot_revision\`"
+            echo "- runner: \`${{ matrix.os }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Test simple-pty
+        run: make -C _components/simple-pty test
+
+      - name: Test simple-termshot
+        run: make -C _components/simple-termshot test
+
+      - name: Install component tools
+        run: |
+          prefix="$RUNNER_TEMP/simple"
+          make -C _components/simple-pty install PREFIX="$prefix"
+          make -C _components/simple-termshot install PREFIX="$prefix"
+          echo "$prefix/bin" >> "$GITHUB_PATH"
+
+      - name: Test the integration
+        run: make test
