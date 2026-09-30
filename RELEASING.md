@@ -4,8 +4,9 @@
 It does not make one component's build or release depend on another component.
 
 The current executable integration check covers `simple-pty` working with
-`simple-termshot`. It does not claim executable coverage of every project
-listed in the Simple overview.
+`simple-termshot`. `simple-ansi` and `simple-decision` have independent test
+suites and release cycles; this repository documents how they compose without
+making their releases depend on this repository.
 
 ## Validate the current tools
 
@@ -15,10 +16,15 @@ listed in the Simple overview.
 4. Inspect the component test results and the cross-tool integration result.
 5. Record the exact `simple-pty` and `simple-termshot` commit identifiers shown
    in the workflow summary, including failed or inconclusive runs.
+6. Review the latest component CI results for `simple-ansi` and
+   `simple-decision`, and record the exact revisions reviewed.
 
-The workflow checks out each component's current default branch. It does not
-select a component tag or pin a component commit. Recorded commit identifiers
-are evidence of what a particular run tested, not constraints on future runs.
+The workflow checks out the current default branches of `simple-pty` and
+`simple-termshot`. It does not select a component tag or pin a component
+commit. `simple-ansi` and `simple-decision` are reviewed separately rather than
+added as blocking dependencies when no cross-tool behavior is under test.
+Recorded commit identifiers are evidence of what a particular validation
+covered, not constraints on future runs.
 
 ## Publish an overall Simple version
 

@@ -18,8 +18,8 @@ agent can check.
 | [simple-termshot](https://github.com/SonicField/simple-termshot) | A terminal renderer that turns captured PTY bytes into the final screen a person would have seen. |
 | [simple-md](https://github.com/SonicField/simple-md) | A terminal Markdown viewer for presenting durable, human-readable documents without leaving the command line. |
 | [Honest](https://github.com/SonicField/honest) | A typed, self-describing interchange format with command-line tools for validating, formatting, querying, building, and extracting structured documents. |
-| `simple-ansi` | A streaming filter that removes terminal control sequences while preserving the remaining bytes in their original order. |
-| `simple-decision` | An append-only Markdown decision log for recording what was decided, why, and what later superseded it. |
+| [simple-ansi](https://github.com/SonicField/simple-ansi) | A streaming filter that removes terminal control sequences while preserving the remaining bytes in their original order. |
+| [simple-decision](https://github.com/SonicField/simple-decision) | An append-only Markdown decision log for recording what was decided, why, and what later superseded it. |
 
 These are complementary projects, not hard dependencies. A user can adopt one
 without adopting the others, and a workflow should use only the parts it needs.
@@ -83,7 +83,7 @@ The same pattern applies to editors, REPLs, text interfaces, build tools, and
 other command-line software. Not every task needs an interactive session, a
 rendered screen, or a formal report. The parts compose when those needs arise.
 
-## Executable integration example
+## Composition examples
 
 The worked [PTY-to-screen example](examples/pty-termshot.md) uses a
 deterministic interactive Bash fixture to show `simple-pty` and
@@ -91,7 +91,13 @@ deterministic interactive Bash fixture to show `simple-pty` and
 raw PTY history retains an overwritten progress value while the rendered
 screen contains only the final value.
 
-With both tools installed on `PATH`, run:
+The [linear-output and decision example](examples/ansi-decision.md) shows the
+complementary path: use `simple-ansi` when chronological text is the useful
+artefact, record a consequential conclusion with `simple-decision`, and review
+the resulting Markdown with `simple-md`.
+
+The PTY-to-screen example is executable. With both tools installed on `PATH`,
+run:
 
 ```sh
 make test
@@ -153,6 +159,4 @@ The current executable example covers `simple-pty` with `simple-termshot`; it
 does not claim executable integration coverage of every listed project. The
 current Honest, `simple-ansi`, and `simple-decision` changes have passed their
 local project gates, but that is not a claim that their hosted CI has run.
-`simple-ansi` and `simple-decision` do not yet have publication remotes, so
-their table entries deliberately have no public links. See [Release
-Validation](RELEASING.md) for the manual overall-version process.
+See [Release Validation](RELEASING.md) for the manual overall-version process.
